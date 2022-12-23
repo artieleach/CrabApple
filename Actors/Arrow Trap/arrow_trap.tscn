@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://u818tjtb2ruc"]
+
+[ext_resource type="Script" path="res://ArrowTrap.gd" id="1_ukvsh"]
+
+[node name="ArrowTrap" type="Node2D" node_paths=PackedStringArray("ray") groups=["arrow_trap"]]
+script = ExtResource("1_ukvsh")
+ray = NodePath("RayCast2D")
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(0, 0)
+collision_mask = 15

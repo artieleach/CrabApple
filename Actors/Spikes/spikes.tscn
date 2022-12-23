@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://h4le2rysbipg"]
+
+[ext_resource type="Texture2D" uid="uid://cu5umakmvgd2" path="res://Scenes/World/tileset.png" id="1_a2ncc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w7wu0"]
+atlas = ExtResource("1_a2ncc")
+region = Rect2(224, 168, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c3aor"]
+atlas = ExtResource("1_a2ncc")
+region = Rect2(232, 168, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_c5vx3"]
+animations = [{
+"frames": [SubResource("AtlasTexture_w7wu0"), SubResource("AtlasTexture_c3aor")],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Spikes" type="Area2D" groups=["spikes"]]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+frames = SubResource("SpriteFrames_c5vx3")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-3, 4, -2, 0, 3, 0, 4, 4)

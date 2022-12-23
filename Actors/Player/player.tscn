@@ -1,0 +1,215 @@
+[gd_scene load_steps=25 format=3 uid="uid://pldq741vd4bu"]
+
+[ext_resource type="Script" path="res://Actors/Player/player.gd" id="1_1jip3"]
+[ext_resource type="Texture2D" uid="uid://c14a74s441fqy" path="res://Actors/Player/sprite.png" id="2_or8n4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nglwu"]
+atlas = ExtResource("2_or8n4")
+region = Rect2(0, 24, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4h6r7"]
+atlas = ExtResource("2_or8n4")
+region = Rect2(8, 24, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_prhgf"]
+atlas = ExtResource("2_or8n4")
+region = Rect2(0, 32, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ulfj"]
+atlas = ExtResource("2_or8n4")
+region = Rect2(0, 56, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6l3ni"]
+atlas = ExtResource("2_or8n4")
+region = Rect2(0, 16, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8qyx7"]
+atlas = ExtResource("2_or8n4")
+region = Rect2(0, 8, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ewgvl"]
+atlas = ExtResource("2_or8n4")
+region = Rect2(0, 40, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qmr4d"]
+atlas = ExtResource("2_or8n4")
+region = Rect2(0, 48, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_05tnb"]
+atlas = ExtResource("2_or8n4")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kf1o8"]
+atlas = ExtResource("2_or8n4")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nk3u0"]
+atlas = ExtResource("2_or8n4")
+region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ffteq"]
+atlas = ExtResource("2_or8n4")
+region = Rect2(24, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8fr0b"]
+animations = [{
+"frames": [SubResource("AtlasTexture_nglwu"), SubResource("AtlasTexture_4h6r7")],
+"loop": true,
+"name": &"climb",
+"speed": 5.0
+}, {
+"frames": [SubResource("AtlasTexture_prhgf")],
+"loop": true,
+"name": &"crouch",
+"speed": 5.0
+}, {
+"frames": [SubResource("AtlasTexture_7ulfj")],
+"loop": true,
+"name": &"hurt",
+"speed": 5.0
+}, {
+"frames": [SubResource("AtlasTexture_6l3ni")],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [SubResource("AtlasTexture_8qyx7")],
+"loop": true,
+"name": &"jump",
+"speed": 5.0
+}, {
+"frames": [SubResource("AtlasTexture_ewgvl")],
+"loop": true,
+"name": &"latch",
+"speed": 5.0
+}, {
+"frames": [SubResource("AtlasTexture_qmr4d")],
+"loop": true,
+"name": &"look_up",
+"speed": 5.0
+}, {
+"frames": [SubResource("AtlasTexture_05tnb"), SubResource("AtlasTexture_kf1o8"), SubResource("AtlasTexture_nk3u0"), SubResource("AtlasTexture_ffteq")],
+"loop": true,
+"name": &"run",
+"speed": 15.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_agah3"]
+size = Vector2(6, 6)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v76qf"]
+size = Vector2(4, 2)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_16c8o"]
+size = Vector2(7, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s7vak"]
+size = Vector2(3, 5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c2j3x"]
+size = Vector2(4, 4)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_e8p60"]
+radius = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xpnpf"]
+radius = 2.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_264p6"]
+radius = 2.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6j8v6"]
+radius = 1.0
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("player_sprite", "ledge_grab", "space_check", "collision_body", "debug_label", "camera_center", "floor_check", "damage_timer") groups=["Player"]]
+texture_filter = 1
+script = ExtResource("1_1jip3")
+player_sprite = NodePath("AnimatedSprite2D")
+ledge_grab = NodePath("LedgeGrab")
+space_check = NodePath("SpaceDetector")
+collision_body = NodePath("Body")
+debug_label = NodePath("Label")
+camera_center = NodePath("CameraCenter")
+floor_check = NodePath("Floor")
+damage_timer = NodePath("")
+
+[node name="CameraCenter" type="Node2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 1
+frames = SubResource("SpriteFrames_8fr0b")
+animation = &"hurt"
+playing = true
+
+[node name="Body" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_agah3")
+
+[node name="LedgeGrab" type="Area2D" parent="."]
+
+[node name="LedgeGrabCollision" type="CollisionShape2D" parent="LedgeGrab"]
+position = Vector2(4, -2)
+shape = SubResource("RectangleShape2D_v76qf")
+debug_color = Color(0.54902, 0.564706, 0, 0.419608)
+
+[node name="SpaceDetector" type="Area2D" parent="."]
+
+[node name="SpaceDetectorCollision" type="CollisionShape2D" parent="SpaceDetector"]
+position = Vector2(4.5, -7)
+shape = SubResource("RectangleShape2D_16c8o")
+debug_color = Color(0.541176, 0.564706, 0.0352941, 0.419608)
+
+[node name="Interact" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 15
+
+[node name="InteractCollision" type="CollisionShape2D" parent="Interact"]
+position = Vector2(0, 1.5)
+shape = SubResource("RectangleShape2D_s7vak")
+debug_color = Color(0, 0.643137, 0.294118, 0.419608)
+
+[node name="SpikeDetector" type="Area2D" parent="."]
+
+[node name="SpikeDetectorCollision" type="CollisionShape2D" parent="SpikeDetector"]
+shape = SubResource("RectangleShape2D_c2j3x")
+debug_color = Color(0.996078, 0, 0.223529, 0.419608)
+
+[node name="Floor" type="Area2D" parent="."]
+
+[node name="FloorCheck" type="CollisionShape2D" parent="Floor"]
+position = Vector2(10, 5)
+shape = SubResource("CircleShape2D_e8p60")
+debug_color = Color(0, 0.6, 0.705882, 0.419608)
+
+[node name="SpaceCheck1" type="CollisionShape2D" parent="Floor"]
+position = Vector2(6, 5)
+shape = SubResource("CircleShape2D_xpnpf")
+debug_color = Color(0, 0.6, 0.705882, 0.419608)
+
+[node name="SpaceCheck2" type="CollisionShape2D" parent="Floor"]
+position = Vector2(10, 0)
+shape = SubResource("CircleShape2D_264p6")
+debug_color = Color(0, 0.6, 0.705882, 0.419608)
+
+[node name="Hands" type="Area2D" parent="."]
+
+[node name="HandsCollision" type="CollisionShape2D" parent="Hands"]
+position = Vector2(2, 0)
+shape = SubResource("CircleShape2D_6j8v6")
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[connection signal="body_shape_entered" from="LedgeGrab" to="." method="_on_ledge_grab_body_shape_entered"]
+[connection signal="body_shape_exited" from="LedgeGrab" to="." method="_on_ledge_grab_body_shape_exited"]
+[connection signal="area_entered" from="SpaceDetector" to="." method="_on_space_detector_area_entered"]
+[connection signal="body_entered" from="SpaceDetector" to="." method="_on_space_detector_body_entered"]
+[connection signal="body_exited" from="SpaceDetector" to="." method="_on_space_detector_body_exited"]
+[connection signal="area_entered" from="Interact" to="." method="_on_interact_area_entered"]
+[connection signal="area_exited" from="Interact" to="." method="_on_interact_area_exited"]
+[connection signal="body_entered" from="Interact" to="." method="_on_interact_body_entered"]
+[connection signal="body_exited" from="Interact" to="." method="_on_interact_body_exited"]
+[connection signal="area_entered" from="SpikeDetector" to="." method="_on_spike_detector_area_entered"]
+[connection signal="area_exited" from="SpikeDetector" to="." method="_on_spike_detector_area_exited"]
+[connection signal="body_shape_entered" from="Floor" to="." method="_on_floor_body_shape_entered"]
+[connection signal="body_shape_exited" from="Floor" to="." method="_on_floor_body_shape_exited"]

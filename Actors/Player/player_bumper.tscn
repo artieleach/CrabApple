@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://bqj3malvn7tp7"]
+
+[ext_resource type="Script" path="res://Actors/Player/player_bumper.gd" id="1_fapue"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_elhjf"]
+radius = 3.0
+
+[node name="PlayerBumper" type="RigidBody2D" node_paths=PackedStringArray("timer")]
+collision_layer = 14
+collision_mask = 14
+mass = 8.0
+linear_damp = 1.0
+script = ExtResource("1_fapue")
+timer = NodePath("Timer")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_elhjf")
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://6wxkc22ucmv8"]
+
+[ext_resource type="Script" path="res://Actors/Hook/hook.gd" id="1_8bggw"]
+[ext_resource type="Texture2D" uid="uid://d354njah1knu" path="res://Actors/Hook/chain.png" id="2_3a0au"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hfwah"]
+radius = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_blkpu"]
+radius = 1.0
+
+[node name="Hook" type="RigidBody2D" node_paths=PackedStringArray("chain_texture")]
+collision_layer = 2
+collision_mask = 2
+lock_rotation = true
+script = ExtResource("1_8bggw")
+chain_texture = NodePath("TextureRect")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_hfwah")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_left = -4.0
+offset_right = 4.0
+offset_bottom = 8.0
+pivot_offset = Vector2(4, 0)
+texture = ExtResource("2_3a0au")
+stretch_mode = 1
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_blkpu")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

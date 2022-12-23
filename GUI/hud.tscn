@@ -1,0 +1,119 @@
+[gd_scene load_steps=8 format=3 uid="uid://droey53gu6efo"]
+
+[ext_resource type="Theme" uid="uid://ckx2hhpmrt0b7" path="res://GUI/theme.tres" id="1_wu1h1"]
+[ext_resource type="Texture2D" uid="uid://j7veixg2yyjo" path="res://GUI/health.png" id="2_8lu2g"]
+[ext_resource type="Script" path="res://GUI/hud.gd" id="2_yxr0u"]
+[ext_resource type="Texture2D" uid="uid://bt2gkdktpukg3" path="res://GUI/coin.png" id="3_wf6mj"]
+[ext_resource type="Texture2D" uid="uid://b7n7h53orbnn3" path="res://GUI/bomb.png" id="4_d0dvj"]
+[ext_resource type="Texture2D" uid="uid://0ep5nffoft11" path="res://GUI/chain.png" id="5_ajcg7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ua7lm"]
+
+[node name="HUD" type="Control" node_paths=PackedStringArray("health_counter", "wealth_counter", "bomb_counter", "chain_counter")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_wu1h1")
+script = ExtResource("2_yxr0u")
+health_counter = NodePath("MarginContainer/HBoxContainer/Health")
+wealth_counter = NodePath("MarginContainer/HBoxContainer/Wealth")
+bomb_counter = NodePath("MarginContainer/HBoxContainer/Bombs")
+chain_counter = NodePath("MarginContainer/HBoxContainer/Chains")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = -10
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+offset_left = 2.0
+offset_top = -10.0
+offset_right = 126.0
+offset_bottom = 22.0
+theme_override_constants/separation = 0
+
+[node name="Health" type="Label" parent="MarginContainer/HBoxContainer"]
+offset_top = 8.0
+offset_right = 4.0
+offset_bottom = 24.0
+size_flags_horizontal = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+text = "4"
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+offset_left = 4.0
+offset_right = 12.0
+offset_bottom = 32.0
+size_flags_horizontal = 0
+texture = ExtResource("2_8lu2g")
+stretch_mode = 3
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/HBoxContainer"]
+offset_left = 12.0
+offset_right = 63.0
+offset_bottom = 32.0
+theme_override_constants/separation = 51
+theme_override_styles/separator = SubResource("StyleBoxEmpty_ua7lm")
+
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+offset_left = 63.0
+offset_right = 71.0
+offset_bottom = 32.0
+size_flags_horizontal = 8
+texture = ExtResource("3_wf6mj")
+stretch_mode = 3
+
+[node name="Wealth" type="Label" parent="MarginContainer/HBoxContainer"]
+offset_left = 71.0
+offset_top = 8.0
+offset_right = 95.0
+offset_bottom = 24.0
+size_flags_horizontal = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+text = "000000"
+
+[node name="TextureRect3" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+offset_left = 95.0
+offset_right = 103.0
+offset_bottom = 32.0
+texture = ExtResource("4_d0dvj")
+stretch_mode = 3
+
+[node name="Bombs" type="Label" parent="MarginContainer/HBoxContainer"]
+offset_left = 103.0
+offset_top = 8.0
+offset_right = 107.0
+offset_bottom = 24.0
+size_flags_horizontal = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+text = "4"
+
+[node name="TextureRect4" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+offset_left = 107.0
+offset_right = 115.0
+offset_bottom = 32.0
+texture = ExtResource("5_ajcg7")
+stretch_mode = 3
+
+[node name="Chains" type="Label" parent="MarginContainer/HBoxContainer"]
+offset_left = 115.0
+offset_top = 8.0
+offset_right = 119.0
+offset_bottom = 24.0
+size_flags_horizontal = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+text = "4"
