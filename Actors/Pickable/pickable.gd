@@ -59,16 +59,16 @@ func _physics_process(_delta):
 func shatter():
 	var interior = randi_range(0, 10)
 	if object_type == 'breakable':
-		interior = -1
+		interior = 0
 	match interior:
-		[0, 1, 2, 3]:
+		0, 1, 2, 3:
 			pass
-		[4, 5, 6]:
+		4, 5, 6:
 			var new_treasure = Global.pickable.instantiate()
 			new_treasure.object_type = 'treasure'
 			new_treasure.position = position
 			get_parent().add_child(new_treasure)
-		[7, 8, 9, 10]:
+		7, 8, 9, 10:
 			var new_treasure = Global.pickable.instantiate()
 			new_treasure.object_type = 'standard'
 			new_treasure.position = position
@@ -97,14 +97,13 @@ func _on_detector_body_entered(body):
 			queue_free()
 		if linear_velocity.distance_to(Vector2.ZERO) > 100:
 			body.detatch_from_grapple()
-			body.velocity += linear_velocity
+			body.velocity += -linear_velocity
 			if object_type == 'arrow':
 				Global.health -= 2
 			else:
 				Global.health -= 1
 			body.emit_signal('hit')
 	if fired:
-		modulate = Color.RED
 		gravity_scale = 1.0
 		apply_torque_impulse(25.0)
 		fired = false
@@ -123,5 +122,5 @@ func detonate():
 	queue_free()
 
 
-func _on_affected_by_blast_radius_area_entered(area):
+func _on_affected_by_blast_radius_area_entered(_area):
 	sleeping = false

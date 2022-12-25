@@ -22,7 +22,7 @@ const enter_tiles = [1, 3, 5, 7, 9, 11, 13]
 const exit_tiles = [4, 5, 6, 7, 12, 13, 14]
 
 var datums
-var map_dimensions = Vector2(4, 8)
+var map_dimensions = Vector2(4, 4)
 var ground_coords = []
 var active_hook = null
 
@@ -63,12 +63,17 @@ func _process(delta):
 
 
 func _on_player_hit():
-	var pb = Global.player_bumper.instantiate()
-	pb.target = player
-	pb.position = player.position
-	pb.linear_velocity = player.velocity
-	call_deferred("add_child", pb)
-	player.taking_damage = true
+	if not player.i_frames:
+		player.i_frames = true
+		player.i_frame_timer.start()
+		var pb = Global.player_bumper.instantiate()
+		pb.target = player
+		pb.position = player.position
+		pb.linear_velocity = player.velocity
+		call_deferred("add_child", pb)
+		player.taking_damage = true
+		if player.held_item != null:
+			player.throw = true
 
 
 class block:
@@ -113,28 +118,23 @@ func set_chunk(chunk_pos: Vector2i, chunk_ID: int, variation: int):
 					block_data.air:
 						pass
 					block_data.floor:
-						if randi_range(0, 100) < 5 and tm.get_cell_atlas_coords(Global.layers.collision, Vector2i(x, y-1)) == block_data.floor:
-							var cur_push = Global.crate.instantiate()
-							cur_push.position = (Vector2(x, y) + Vector2(offset.x, offset.y)) * 8 + Vector2(4, 4)
-							add_child(cur_push)
+						if y > 0 and y < 7 and x > 0 and x < 9:
+							interior_ground.append(Vector2i(x, y) + offset)
 						else:
-							if y > 0 and y < 7 and x > 0 and x < 9:
-								interior_ground.append(Vector2i(x, y) + offset)
-							else:
-								ground_coords.append(Vector2i(x, y) + offset)
-							tm.set_cell(layer, Vector2i(x, y) + offset, 1, cur_atlas)
+							ground_coords.append(Vector2i(x, y) + offset)
+						tm.set_cell(layer, Vector2i(x, y) + offset, 1, cur_atlas)
 					block_data.treasure:
-						if randi_range(0, 100) < 45:
+						if randi_range(0, 100) < 80:
 							var cur_treasure = Global.pickable.instantiate()
 							cur_treasure.object_type = ['container', 'standard', 'treasure', 'breakable'].pick_random()
-							cur_treasure.position = (Vector2(x, y) + Vector2(offset.x, offset.y)) * 8 + Vector2(4, 4)
+							cur_treasure.position = (Vector2(x, y) + Vector2(offset.x, offset.y)) * Global.tile_size + Vector2(4, 4)
 							add_child(cur_treasure)
 					block_data.enterance:
-						player.position = (Vector2(x, y) + Vector2(offset.x, offset.y)) * 8
+						player.position = (Vector2(x, y) + Vector2(offset.x, offset.y)) * Global.tile_size
 						tm.set_cell(layer, Vector2i(x, y) + offset, 1, cur_atlas)
 					block_data.spikes:
 						var cur_spike = Global.spike.instantiate()
-						cur_spike.position = (Vector2(x, y) + Vector2(offset.x, offset.y)) * 8 + Vector2(4, 4)
+						cur_spike.position = (Vector2(x, y) + Vector2(offset.x, offset.y)) * Global.tile_size + Vector2(4, 4)
 						add_child(cur_spike)
 					block_data.ladder:
 						tm.set_cell(Global.layers.decorations, Vector2i(x, y) + offset, 1, cur_atlas)
@@ -149,7 +149,12 @@ func clean_map():
 	for y in range(4, map_tile_size.y - 4):
 		for x in range(4, map_tile_size.x - 4):
 			if tm.get_cell_atlas_coords(Global.layers.collision, Vector2i(x, y)) == block_data.floor:
-				if tm.get_cell_atlas_coords(Global.layers.collision, Vector2i(x + 1, y)) == block_data.nill and tm.get_cell_atlas_coords(Global.layers.collision, Vector2i(x + 2, y)) == block_data.nill:
+				if tm.get_cell_atlas_coords(Global.layers.collision, Vector2i(x, y+1)) == block_data.floor and randf() < 0.1:
+					tm.set_cell(Global.layers.collision, Vector2i(x, y), 1, block_data.nill)
+					var cur_push = Global.crate.instantiate()
+					cur_push.position = Vector2(x, y) * Global.tile_size + Vector2(4, 4)
+					add_child(cur_push)
+				elif tm.get_cell_atlas_coords(Global.layers.collision, Vector2i(x + 1, y)) == block_data.nill and tm.get_cell_atlas_coords(Global.layers.collision, Vector2i(x + 2, y)) == block_data.nill:
 					if randi_range(0, 100) < 3:
 						tm.set_cell(4, Vector2i(x, y), 1, block_data.arrow_trap_right)
 						var cur_at = Global.arrow_trap.instantiate()

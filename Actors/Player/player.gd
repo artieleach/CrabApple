@@ -7,7 +7,7 @@ extends CharacterBody2D
 @export var debug_label : Label
 @export var camera_center : Node2D
 @export var floor_check : Area2D
-@export var damage_timer : Timer
+@export var i_frame_timer : Timer
 
 
 const ladder_tiles = [Vector2i(10, 28), Vector2i(10, 27), Vector2i(31, 32), Vector2i(31, 31)]
@@ -52,6 +52,10 @@ var rope_tiles = []
 
 var taking_damage = false
 
+var i_frames = false
+
+var prev_motion : Vector2
+
 signal hit
 
 func _ready():
@@ -73,15 +77,23 @@ func _process(_delta):
 	else:
 		camera_center.position.y = lerp(camera_center.position.y, 0.0, 0.2)
 	if Global.health < 1:
-		print('ded')
-	
+		pass
+	if i_frames:
+		if roundi(i_frame_timer.time_left*100) % 20 >= 10:
+			modulate.a = 0
+		else:
+			modulate.a = 1
+
 
 func _physics_process(delta):
 	var dir = Vector2(1, 1) if player_sprite.flip_h == false else Vector2(-1, 1)
 	if is_on_floor() or state == 'latch':
 		coyote_time = 0.0
+	
+	
 	if not ladder_behind and state == 'climb':
 		state = 'fall'
+	
 	
 	if not is_on_floor() and state == "fall":
 		coyote_time += delta
@@ -115,8 +127,29 @@ func _physics_process(delta):
 			cur_hook.connect("hooked", add_hook)
 			cur_hook.linear_velocity = Vector2(120, -300) * dir + velocity * Vector2(1, 0.5)
 	
+	
 	if is_on_floor() and velocity == Vector2.ZERO:
 		player_sprite.animation = "idle"
+	
+	
+	var direction = Input.get_axis("left", "right")
+	if direction and not taking_damage:
+		look_timer = 0.0
+		if not state == 'latch':
+			player_sprite.flip_h = direction < 0
+		if not state in ['latch', 'climb']:
+			velocity.x = lerp(velocity.x , direction * SPEED, 0.045)
+			if active_grapple:
+				active_grapple.player_holder.apply_central_force(Vector2(velocity.x, 0))
+			ledge_grab.scale.x = dir.x
+			space_check.scale.x = dir.x
+			floor_check.scale.x = dir.x
+			player_sprite.animation = "run"
+			if len(skip_tile) == 0 and len(next_ground_tile) > 0 and is_on_floor() and abs(velocity.x) > 50.0:
+				velocity.y -= 40
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+	
 	
 	if Input.is_action_pressed("up"):
 		if ladder_behind and abs(position.x - tm.map_to_local(tm.local_to_map(position)).x) < 3:
@@ -132,27 +165,9 @@ func _physics_process(delta):
 				position.y -= 1.0
 		else:
 			look_timer += delta
-			if not state == 'latch':
+			if not state == 'latch' and not direction:
 				player_sprite.animation = "look_up"
 	
-	
-	var direction = Input.get_axis("left", "right")
-	if direction and not taking_damage:
-		look_timer = 0.0
-		if not state == 'latch':
-			player_sprite.flip_h = direction < 0
-		if not state in ['latch', 'climb']:
-			velocity.x = lerp(velocity.x , direction * SPEED, 0.045)
-			if active_grapple:
-				active_grapple.player_holder.apply_central_force(Vector2(velocity.x, 0))
-			ledge_grab.scale.x = direction
-			space_check.scale.x = direction
-			floor_check.scale.x = direction
-			player_sprite.animation = "run"
-			if len(skip_tile) == 0 and len(next_ground_tile) > 0 and is_on_floor() and abs(velocity.x) > 50.0:
-				velocity.y -= 40
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
 	
 	if Input.is_action_pressed("down"):
 		look_timer -= delta
@@ -168,9 +183,16 @@ func _physics_process(delta):
 			position.y += 60.0 * delta
 			velocity.y = 0
 			player_sprite.animation = "climb"
-		elif state not  in ["latch", "grapple"]:
+		elif state not in ["latch", "grapple"]:
 			player_sprite.animation = "crouch"
 			state = 'fall'
+		elif state == 'latch':
+			player_sprite.animation = "latch_look"
+	
+	
+	if Input.is_action_just_released("down") and state == 'latch':
+		player_sprite.animation = 'latch'
+	
 	
 	if Input.is_action_just_pressed("action") or throw:
 		throw = false
@@ -180,7 +202,9 @@ func _physics_process(delta):
 				held_item = possible_held_items[0]
 				held_item.collision_layer = 0
 				held_item.collision_mask = 0
+				held_item.z_index = 10
 		else:
+			held_item.z_index = 0
 			held_item.collision_layer = 8
 			held_item.collision_mask = 4
 			var output = Vector2(0, 0)
@@ -190,9 +214,13 @@ func _physics_process(delta):
 				else:
 					output = velocity + Vector2(120, 200) * dir
 			else:
-				output = velocity + Vector2(120, -200) * dir
+				if direction:
+					output = velocity + Vector2(200, -100) * dir
+				else:
+					output = velocity + Vector2(180, -140) * dir
 				if Input.is_action_pressed("up"):
-					output *= Vector2(0.8, 1.2)
+					output *= Vector2(0.8, 1.4)
+			held_item.sprite.flip_h = false
 			held_item.linear_velocity = output
 			held_item = null
 			if other_held_item:
@@ -200,7 +228,8 @@ func _physics_process(delta):
 				other_held_item = null
 	
 	if held_item != null:
-		held_item.position = position
+		held_item.sprite.flip_h = player_sprite.flip_h
+		held_item.position = position + dir * Vector2(4, -1)
 		held_item.linear_velocity = Vector2.ZERO
 	
 	if Input.is_action_just_pressed("bomb"):
@@ -232,8 +261,10 @@ func _physics_process(delta):
 				get_parent().add_child(cur_rope)
 				cur_rope.connect("peaked", get_parent().add_rope)
 	
+	
 	if Input.is_action_just_released("up") or Input.is_action_just_released("down"):
 		look_timer = 0.0
+	
 	
 	if not skip_frame:
 		for i in get_slide_collision_count():
@@ -257,14 +288,15 @@ func _physics_process(delta):
 	
 	move_and_slide()
 
-
+func drop_held_item():
+	throw = true
 
 func add_hook(hook_pos):
 	active_grapple = null
 	for grap in get_tree().get_nodes_in_group("grapples"):
 		grap.queue_free()
 	var distance_to_player = hook_pos.distance_to(position)
-	if distance_to_player < 44 and distance_to_player > 10 and position.y > hook_pos.y:
+	if distance_to_player > 10:
 		var cur_grapple = Global.grapple.instantiate()
 		cur_grapple.add_to_group("grapples")
 		cur_grapple.target = self
@@ -277,13 +309,23 @@ func add_hook(hook_pos):
 		cur_grapple.player_holder.linear_velocity = velocity
 		state = 'grapple'
 		active_grapple = cur_grapple
+		if distance_to_player > 44:
+			detatch_from_grapple()
+		
+	
 
 func detatch_from_grapple():
 	if active_grapple != null:
 		velocity = active_grapple.player_holder.linear_velocity
+		state = 'fall'
+		var cur_chain = Global.hook.instantiate()
+		cur_chain.target = self
+		cur_chain.extend = false
+		cur_chain.add_to_group("hooks")
+		cur_chain.position = active_grapple.position
+		get_parent().call_deferred("add_child", cur_chain)
 		active_grapple.queue_free()
 		active_grapple = null
-		state = 'fall'
 
 
 func _on_ledge_grab_body_shape_entered(_body_rid, body, body_shape_index, _local_shape_index):
@@ -376,3 +418,7 @@ func _on_space_detector_area_entered(area):
 		Global.health -= 99
 		emit_signal("hit")
 
+
+
+func _on_i_frames_timeout():
+	i_frames = false

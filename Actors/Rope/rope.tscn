@@ -3,16 +3,16 @@
 [ext_resource type="Script" path="res://Actors/Rope/rope.gd" id="1_ty11f"]
 [ext_resource type="Texture2D" uid="uid://cu5umakmvgd2" path="res://Scenes/World/tileset.png" id="1_xybwg"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_qtek1"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u0d7p"]
 size = Vector2(3, 4)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_y3d7k"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_24dj4"]
 atlas = ExtResource("1_xybwg")
 region = Rect2(144, 296, 8, 8)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_v0ch1"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_uekm3"]
 animations = [{
-"frames": [SubResource("AtlasTexture_y3d7k")],
+"frames": [SubResource("AtlasTexture_24dj4")],
 "loop": true,
 "name": &"default",
 "speed": 5.0
@@ -25,8 +25,8 @@ linear_velocity = Vector2(0, -200)
 script = ExtResource("1_ty11f")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_qtek1")
+shape = SubResource("RectangleShape2D_u0d7p")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(-0.5, 2)
-frames = SubResource("SpriteFrames_v0ch1")
+frames = SubResource("SpriteFrames_uekm3")

@@ -5,7 +5,7 @@ extends Control
 @export var bomb_counter : Label
 @export var chain_counter : Label
 
-func _process(delta):
+func _process(_delta):
 	health_counter.text = str(Global.health)
 	bomb_counter.text = str(Global.bombs)
 	chain_counter.text = str(Global.chains)

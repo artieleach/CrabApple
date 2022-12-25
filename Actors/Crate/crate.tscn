@@ -3,36 +3,36 @@
 [ext_resource type="Texture2D" uid="uid://cu5umakmvgd2" path="res://Scenes/World/tileset.png" id="1_6pugn"]
 [ext_resource type="Script" path="res://Actors/Crate/crate.gd" id="1_xa07o"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_wxc6p"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j8va6"]
+size = Vector2(4, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gvlnp"]
+resource_local_to_scene = true
+size = Vector2(7.95, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2bw3p"]
+size = Vector2(6, 2)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2kgbh"]
+radius = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qr2s6"]
+radius = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qyxk2"]
+radius = 1.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n21ca"]
 atlas = ExtResource("1_6pugn")
 region = Rect2(184, 160, 8, 8)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_07num"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_7ne8p"]
 animations = [{
-"frames": [SubResource("AtlasTexture_wxc6p")],
+"frames": [SubResource("AtlasTexture_n21ca")],
 "loop": true,
 "name": &"default",
 "speed": 5.0
 }]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2uumi"]
-resource_local_to_scene = true
-size = Vector2(7.95, 8)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ydgsl"]
-size = Vector2(6, 2)
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_2rf7o"]
-radius = 1.0
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_rf6hy"]
-size = Vector2(4, 4)
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_ky5f0"]
-radius = 1.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_hmpp2"]
-radius = 1.0
 
 [node name="Crate" type="RigidBody2D" node_paths=PackedStringArray("collision_body", "crate_sprite") groups=["bodies"]]
 collision_layer = 15
@@ -44,36 +44,36 @@ script = ExtResource("1_xa07o")
 collision_body = NodePath("Body")
 crate_sprite = NodePath("AnimatedSprite2D")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-frames = SubResource("SpriteFrames_07num")
-
-[node name="Body" type="CollisionShape2D" parent="." groups=["bodies"]]
-shape = SubResource("RectangleShape2D_2uumi")
-
-[node name="Latch" type="CollisionShape2D" parent="." groups=["bodies"]]
-position = Vector2(0, -2)
-shape = SubResource("RectangleShape2D_ydgsl")
-
-[node name="Wheel" type="CollisionShape2D" parent="."]
-position = Vector2(0, 3)
-shape = SubResource("CircleShape2D_2rf7o")
-
 [node name="ExplosionDetector" type="Area2D" parent="."]
 
 [node name="CollisionShape2D4" type="CollisionShape2D" parent="ExplosionDetector"]
-shape = SubResource("RectangleShape2D_rf6hy")
+shape = SubResource("RectangleShape2D_j8va6")
+
+[node name="Body" type="CollisionShape2D" parent="." groups=["bodies"]]
+shape = SubResource("RectangleShape2D_gvlnp")
+
+[node name="Latch" type="CollisionShape2D" parent="." groups=["bodies"]]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_2bw3p")
+
+[node name="Wheel" type="CollisionShape2D" parent="."]
+position = Vector2(0, 3)
+shape = SubResource("CircleShape2D_2kgbh")
 
 [node name="L" type="Area2D" parent="."]
 
 [node name="CollisionShape2D5" type="CollisionShape2D" parent="L"]
 position = Vector2(-4, 0)
-shape = SubResource("CircleShape2D_ky5f0")
+shape = SubResource("CircleShape2D_qr2s6")
 
 [node name="R" type="Area2D" parent="."]
 
 [node name="CollisionShape2D6" type="CollisionShape2D" parent="R"]
 position = Vector2(4, 0)
-shape = SubResource("CircleShape2D_hmpp2")
+shape = SubResource("CircleShape2D_qyxk2")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+frames = SubResource("SpriteFrames_7ne8p")
 
 [connection signal="area_entered" from="ExplosionDetector" to="." method="_on_explosion_detector_area_entered"]
 [connection signal="body_entered" from="L" to="." method="_on_l_body_entered"]

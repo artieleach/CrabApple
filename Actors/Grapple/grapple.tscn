@@ -3,10 +3,10 @@
 [ext_resource type="Script" path="res://Actors/Grapple/grapple.gd" id="1_cllks"]
 [ext_resource type="Texture2D" uid="uid://d354njah1knu" path="res://Actors/Hook/chain.png" id="1_r3cbd"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_bixmr"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_esqxn"]
 radius = 1.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_yd0lt"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_rx4up"]
 radius = 2.0
 
 [node name="Grapple" type="Node2D" node_paths=PackedStringArray("player_holder", "spring", "chain_texture")]
@@ -20,7 +20,7 @@ collision_layer = 0
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-shape = SubResource("CircleShape2D_bixmr")
+shape = SubResource("CircleShape2D_esqxn")
 
 [node name="DampedSpringJoint2D" type="DampedSpringJoint2D" parent="."]
 node_a = NodePath("../StaticBody2D")
@@ -36,7 +36,7 @@ collision_mask = 2
 linear_damp = 0.2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerHolder"]
-shape = SubResource("CircleShape2D_yd0lt")
+shape = SubResource("CircleShape2D_rx4up")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 offset_left = -4.0

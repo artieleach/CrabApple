@@ -44,7 +44,7 @@ const block_data = {
 var object_data = ['arrow', 'bomb', 'container', 'standard', 'treasure']
 
 
-func _process(delta):
+func _process(_delta):
 	health = clamp(health, 0, 99)
 	bombs = clamp(bombs, 0, 99)
 	chains = clamp(chains, 0, 99)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://pldq741vd4bu"]
+[gd_scene load_steps=26 format=3 uid="uid://pldq741vd4bu"]
 
 [ext_resource type="Script" path="res://Actors/Player/player.gd" id="1_1jip3"]
 [ext_resource type="Texture2D" uid="uid://c14a74s441fqy" path="res://Actors/Player/sprite.png" id="2_or8n4"]
@@ -30,6 +30,10 @@ region = Rect2(0, 8, 8, 8)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ewgvl"]
 atlas = ExtResource("2_or8n4")
 region = Rect2(0, 40, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xevg4"]
+atlas = ExtResource("2_or8n4")
+region = Rect2(32, 40, 8, 8)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qmr4d"]
 atlas = ExtResource("2_or8n4")
@@ -83,6 +87,11 @@ animations = [{
 "name": &"latch",
 "speed": 5.0
 }, {
+"frames": [SubResource("AtlasTexture_xevg4")],
+"loop": true,
+"name": &"latch_look",
+"speed": 5.0
+}, {
 "frames": [SubResource("AtlasTexture_qmr4d")],
 "loop": true,
 "name": &"look_up",
@@ -121,7 +130,7 @@ radius = 2.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_6j8v6"]
 radius = 1.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("player_sprite", "ledge_grab", "space_check", "collision_body", "debug_label", "camera_center", "floor_check", "damage_timer") groups=["Player"]]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("player_sprite", "ledge_grab", "space_check", "collision_body", "debug_label", "camera_center", "floor_check", "i_frame_timer") groups=["Player"]]
 texture_filter = 1
 script = ExtResource("1_1jip3")
 player_sprite = NodePath("AnimatedSprite2D")
@@ -131,14 +140,14 @@ collision_body = NodePath("Body")
 debug_label = NodePath("Label")
 camera_center = NodePath("CameraCenter")
 floor_check = NodePath("Floor")
-damage_timer = NodePath("")
+i_frame_timer = NodePath("i_frames")
 
 [node name="CameraCenter" type="Node2D" parent="."]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_index = 1
 frames = SubResource("SpriteFrames_8fr0b")
-animation = &"hurt"
+animation = &"latch_look"
 playing = true
 
 [node name="Body" type="CollisionShape2D" parent="."]
@@ -200,6 +209,9 @@ shape = SubResource("CircleShape2D_6j8v6")
 offset_right = 40.0
 offset_bottom = 23.0
 
+[node name="i_frames" type="Timer" parent="."]
+wait_time = 0.8
+
 [connection signal="body_shape_entered" from="LedgeGrab" to="." method="_on_ledge_grab_body_shape_entered"]
 [connection signal="body_shape_exited" from="LedgeGrab" to="." method="_on_ledge_grab_body_shape_exited"]
 [connection signal="area_entered" from="SpaceDetector" to="." method="_on_space_detector_area_entered"]
@@ -213,3 +225,4 @@ offset_bottom = 23.0
 [connection signal="area_exited" from="SpikeDetector" to="." method="_on_spike_detector_area_exited"]
 [connection signal="body_shape_entered" from="Floor" to="." method="_on_floor_body_shape_entered"]
 [connection signal="body_shape_exited" from="Floor" to="." method="_on_floor_body_shape_exited"]
+[connection signal="timeout" from="i_frames" to="." method="_on_i_frames_timeout"]
