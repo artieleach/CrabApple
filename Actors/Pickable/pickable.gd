@@ -99,7 +99,9 @@ func _on_detector_body_entered(body):
 			body.detatch_from_grapple()
 			body.velocity += -linear_velocity
 			if object_type == 'arrow':
-				Global.health -= 2
+				if sprite.frame == 0:
+					Global.health -= 2
+					sprite.frame = 1
 			else:
 				Global.health -= 1
 			body.emit_signal('hit')

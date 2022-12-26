@@ -23,6 +23,7 @@ const exit_tiles = [4, 5, 6, 7, 12, 13, 14]
 
 var datums
 var map_dimensions = Vector2(4, 4)
+var interior_ground_coords = []
 var ground_coords = []
 var active_hook = null
 
@@ -63,6 +64,7 @@ func _process(delta):
 
 
 func _on_player_hit():
+	player.detatch_from_grapple()
 	if not player.i_frames:
 		player.i_frames = true
 		player.i_frame_timer.start()
@@ -142,18 +144,22 @@ func set_chunk(chunk_pos: Vector2i, chunk_ID: int, variation: int):
 						tm.set_cell(Global.layers.decorations, Vector2i(x, y) + offset, 1, cur_atlas)
 					_:
 						tm.set_cell(layer, Vector2i(x, y) + offset, 1, cur_atlas)
-	tm.set_cells_terrain_connect(4, interior_ground, 0, 0)
+	interior_ground_coords.append(interior_ground)
+	#tm.set_cells_terrain_connect(4, interior_ground, 0, 0)
 
 func clean_map():
 	var map_tile_size = tm.get_used_rect().size
 	for y in range(4, map_tile_size.y - 4):
 		for x in range(4, map_tile_size.x - 4):
+			var cur_spot = 4*floor(y/8)+floor(x/10)
 			if tm.get_cell_atlas_coords(Global.layers.collision, Vector2i(x, y)) == block_data.floor:
 				if tm.get_cell_atlas_coords(Global.layers.collision, Vector2i(x, y+1)) == block_data.floor and randf() < 0.1:
 					tm.set_cell(Global.layers.collision, Vector2i(x, y), 1, block_data.nill)
 					var cur_push = Global.crate.instantiate()
 					cur_push.position = Vector2(x, y) * Global.tile_size + Vector2(4, 4)
 					add_child(cur_push)
+					remove_from_grass(Vector2i(x, y))
+					
 				elif tm.get_cell_atlas_coords(Global.layers.collision, Vector2i(x + 1, y)) == block_data.nill and tm.get_cell_atlas_coords(Global.layers.collision, Vector2i(x + 2, y)) == block_data.nill:
 					if randi_range(0, 100) < 3:
 						tm.set_cell(4, Vector2i(x, y), 1, block_data.arrow_trap_right)
@@ -164,6 +170,7 @@ func clean_map():
 						cur_at.direction = 'right'
 						cur_at.figure_range(tm)
 						cur_at.connect("fire_arrow", fire_arrow_trap)
+						remove_from_grass(Vector2i(x, y))
 				elif tm.get_cell_atlas_coords(Global.layers.collision, Vector2i(x - 1, y)) == block_data.nill and tm.get_cell_atlas_coords(Global.layers.collision, Vector2i(x - 2, y)) == block_data.nill:
 					if randi_range(0, 100) < 3:
 						tm.set_cell(4, Vector2i(x, y), 1, block_data.arrow_trap_left)
@@ -174,7 +181,18 @@ func clean_map():
 						cur_at.direction = 'left'
 						cur_at.figure_range(tm)
 						cur_at.connect("fire_arrow", fire_arrow_trap)
+						remove_from_grass(Vector2i(x, y))
+	for i in range(map_dimensions.x * map_dimensions.y):
+		tm.set_cells_terrain_connect(4, interior_ground_coords[i], 0, 0)
+	tm.set_cells_terrain_connect(4, ground_coords, 0, 0)
 
+
+func remove_from_grass(loc):
+	var cur_spot = 4*floor(loc.y/8)+floor(loc.x/10)
+	if loc in interior_ground_coords[cur_spot]:
+		interior_ground_coords[cur_spot].remove_at(interior_ground_coords[cur_spot].find(loc))
+	elif loc in ground_coords:
+		ground_coords.remove_at(ground_coords.find(loc))
 
 
 func fire_arrow_trap(pew, direction):
@@ -253,7 +271,7 @@ func generate_map():
 						set_chunk(Vector2i(x, y), cb.get_bin(), 16 + (randi() % 4))
 					'exit':
 						set_chunk(Vector2i(x, y), cb.get_bin(), 16 + (randi() % 4)+4)
-	tm.set_cells_terrain_connect(4, ground_coords, 0, 0)
+	
 	clean_map()
 
 

@@ -7,7 +7,8 @@ extends Node2D
 var target
 var dist_travelled : float
 
-
+func _ready():
+	print(player_holder.linear_velocity)
 
 func _physics_process(_delta):
 	dist_travelled = position.distance_to(target.position)

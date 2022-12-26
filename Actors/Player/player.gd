@@ -102,6 +102,8 @@ func _physics_process(delta):
 	
 	if active_grapple != null and state == 'grapple':
 		position = active_grapple.player_holder.global_position
+		if abs(active_grapple.player_holder.linear_velocity.x) < 1:
+			detatch_from_grapple()
 	
 	if Input.is_action_just_pressed("jump"):
 		look_timer = 0.0
