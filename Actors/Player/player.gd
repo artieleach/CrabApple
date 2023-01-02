@@ -14,7 +14,7 @@ const ladder_tiles = [Vector2i(10, 28), Vector2i(10, 27), Vector2i(31, 32), Vect
 
 const SPEED = 80.0
 const inertia = 48
-const JUMP_VELOCITY = -92.0
+const JUMP_VELOCITY = -94.0
 # 240 velocity.y = damage
 var on_tm = false
 

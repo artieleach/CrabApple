@@ -8,6 +8,16 @@
 
 config_version=5
 
+_global_script_classes=[{
+"base": "Control",
+"class": &"RumbleControl",
+"language": &"GDScript",
+"path": "res://GUI/rumble.gd"
+}]
+_global_script_class_icons={
+"RumbleControl": ""
+}
+
 [application]
 
 config/name="Crab Apple"
@@ -21,8 +31,8 @@ Global="*res://Global.gd"
 
 [display]
 
-window/size/viewport_width=192
-window/size/viewport_height=108
+window/size/viewport_width=160
+window/size/viewport_height=90
 window/size/window_width_override=1920
 window/size/window_height_override=1080
 window/stretch/mode="canvas_items"
