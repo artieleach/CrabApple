@@ -46,12 +46,6 @@ const block_data = {
 func _ready():
 	if block_data != Global.block_data:
 		print('WARNING: BLOCK DATA MISMATCH')
-	var gamepads : Array = Input.get_connected_joypads()
-	if gamepads.size() > 0:
-		for device_index in gamepads:
-			Input.stop_joy_vibration(device_index)
-			_rumble_gamepad(device_index, 0.1, 0.2)
-			print(device_index)
 	for i in Global.block_data.keys():
 		all_special_blocks.append(Global.block_data[i])
 	datums = JSON.parse_string(load_map_data())
@@ -68,8 +62,11 @@ func _ready():
 func _process(delta):
 	cam.position = lerp(cam.position, player.camera_center.global_position, 18*delta)
 
-func _rumble_gamepad(device_index: int, weak_magnitude: float, strong_magnitude: float) -> void:
-	Input.start_joy_vibration(device_index, weak_magnitude, strong_magnitude, 1.0)
+func _rumble_gamepad(weak_magnitude: float, strong_magnitude: float) -> void:
+	var gamepads : Array = Input.get_connected_joypads()
+	if gamepads.size() > 0:
+		Input.stop_joy_vibration(0)
+		Input.start_joy_vibration(0, weak_magnitude, strong_magnitude, 1.0)
 
 func _on_player_hit():
 	player.detatch_from_grapple()
