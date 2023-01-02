@@ -14,7 +14,7 @@ const ladder_tiles = [Vector2i(10, 28), Vector2i(10, 27), Vector2i(31, 32), Vect
 
 const SPEED = 80.0
 const inertia = 48
-const JUMP_VELOCITY = -88.0
+const JUMP_VELOCITY = -92.0
 # 240 velocity.y = damage
 var on_tm = false
 
@@ -89,6 +89,7 @@ func _physics_process(delta):
 	var dir = Vector2(1, 1) if player_sprite.flip_h == false else Vector2(-1, 1)
 	if is_on_floor() or state == 'latch':
 		coyote_time = 0.0
+		detatch_from_grapple()
 	
 	
 	if not ladder_behind and state == 'climb':

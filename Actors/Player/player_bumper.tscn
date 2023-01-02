@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Actors/Player/player_bumper.gd" id="1_fapue"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_vl7rr"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_t5if7"]
 radius = 3.0
 
 [node name="PlayerBumper" type="RigidBody2D" node_paths=PackedStringArray("timer")]
@@ -14,7 +14,7 @@ script = ExtResource("1_fapue")
 timer = NodePath("Timer")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_vl7rr")
+shape = SubResource("CircleShape2D_t5if7")
 
 [node name="Timer" type="Timer" parent="."]
 autostart = true
