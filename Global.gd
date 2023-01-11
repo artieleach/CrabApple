@@ -41,8 +41,6 @@ const block_data = {
 	'arrow_trap_left': Vector2i(21, 14)}
 
 
-var object_data = ['arrow', 'bomb', 'container', 'standard', 'treasure']
-
 
 func _process(_delta):
 	health = clamp(health, 0, 99)

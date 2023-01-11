@@ -57,47 +57,86 @@ region = Rect2(24, 0, 8, 8)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_8fr0b"]
 animations = [{
-"frames": [SubResource("AtlasTexture_nglwu"), SubResource("AtlasTexture_4h6r7")],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nglwu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4h6r7")
+}],
 "loop": true,
 "name": &"climb",
 "speed": 5.0
 }, {
-"frames": [SubResource("AtlasTexture_prhgf")],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_prhgf")
+}],
 "loop": true,
 "name": &"crouch",
 "speed": 5.0
 }, {
-"frames": [SubResource("AtlasTexture_7ulfj")],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7ulfj")
+}],
 "loop": true,
 "name": &"hurt",
 "speed": 5.0
 }, {
-"frames": [SubResource("AtlasTexture_6l3ni")],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6l3ni")
+}],
 "loop": true,
 "name": &"idle",
 "speed": 5.0
 }, {
-"frames": [SubResource("AtlasTexture_8qyx7")],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8qyx7")
+}],
 "loop": true,
 "name": &"jump",
 "speed": 5.0
 }, {
-"frames": [SubResource("AtlasTexture_ewgvl")],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ewgvl")
+}],
 "loop": true,
 "name": &"latch",
 "speed": 5.0
 }, {
-"frames": [SubResource("AtlasTexture_xevg4")],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xevg4")
+}],
 "loop": true,
 "name": &"latch_look",
 "speed": 5.0
 }, {
-"frames": [SubResource("AtlasTexture_qmr4d")],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qmr4d")
+}],
 "loop": true,
 "name": &"look_up",
 "speed": 5.0
 }, {
-"frames": [SubResource("AtlasTexture_05tnb"), SubResource("AtlasTexture_kf1o8"), SubResource("AtlasTexture_nk3u0"), SubResource("AtlasTexture_ffteq")],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_05tnb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kf1o8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nk3u0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ffteq")
+}],
 "loop": true,
 "name": &"run",
 "speed": 15.0

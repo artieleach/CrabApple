@@ -7,7 +7,7 @@ var has_fired = false
 
 var skip = false
 var map_pos : Vector2i
-var direction = 'right'
+var facing_right := true
 
 func _physics_process(_delta):
 	if ray.is_colliding() and not has_fired:
@@ -20,13 +20,13 @@ func _physics_process(_delta):
 			skip = true
 			ray.add_exception(cur_hit)
 		if not skip:
-			emit_signal("fire_arrow", position, direction)
+			emit_signal("fire_arrow", position, facing_right)
 			queue_free()
 		skip = false
 
 func figure_range(tm : TileMap):
 	var visible_to_trap = Global.tile_size.x
-	if direction == 'right':
+	if facing_right:
 		for i in range(1, 8):
 			if tm.get_cell_atlas_coords(Global.layers.collision, Vector2i(map_pos.x + i, map_pos.y)) == Vector2i(-1, -1):
 				visible_to_trap += Global.tile_size.x

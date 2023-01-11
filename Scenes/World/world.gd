@@ -23,8 +23,8 @@ const exit_tiles = [4, 5, 6, 7, 12, 13, 14]
 
 var datums
 var map_dimensions = Vector2(4, 4)
-var interior_ground_coords = []
-var ground_coords = []
+var interior_ground_coords := []
+var ground_coords := []
 var active_hook = null
 
 const block_data = {
@@ -67,6 +67,7 @@ func _rumble_gamepad(weak_magnitude: float, strong_magnitude: float) -> void:
 	if gamepads.size() > 0:
 		Input.stop_joy_vibration(0)
 		Input.start_joy_vibration(0, weak_magnitude, strong_magnitude, 1.0)
+
 
 func _on_player_hit():
 	player.detatch_from_grapple()
@@ -133,7 +134,6 @@ func set_chunk(chunk_pos: Vector2i, chunk_ID: int, variation: int):
 					block_data.treasure:
 						if randi_range(0, 100) < 80:
 							var cur_treasure = Global.pickable.instantiate()
-							cur_treasure.object_type = ['container', 'standard', 'treasure', 'breakable'].pick_random()
 							cur_treasure.position = (Vector2(x, y) + Vector2(offset.x, offset.y)) * Global.tile_size + Vector2(4, 4)
 							add_child(cur_treasure)
 					block_data.enterance:
@@ -172,7 +172,7 @@ func clean_map():
 						add_child(cur_at)
 						cur_at.position = Vector2(x, y) * Global.tile_size + Vector2(8, 4)
 						cur_at.map_pos = Vector2i(x, y)
-						cur_at.direction = 'right'
+						cur_at.facing_right = true
 						cur_at.figure_range(tm)
 						cur_at.connect("fire_arrow", fire_arrow_trap)
 						remove_from_grass(Vector2i(x, y))
@@ -183,7 +183,7 @@ func clean_map():
 						add_child(cur_at)
 						cur_at.position = Vector2(x, y) * Global.tile_size + Vector2(0, 4)
 						cur_at.map_pos = Vector2i(x, y)
-						cur_at.direction = 'left'
+						cur_at.facing_right = false
 						cur_at.figure_range(tm)
 						cur_at.connect("fire_arrow", fire_arrow_trap)
 						remove_from_grass(Vector2i(x, y))
@@ -200,12 +200,12 @@ func remove_from_grass(loc):
 		ground_coords.remove_at(ground_coords.find(loc))
 
 
-func fire_arrow_trap(pew, direction):
+func fire_arrow_trap(pew, facing_right):
 	var arrow = Global.pickable.instantiate()
-	arrow.object_type = 'arrow'
-	arrow.direction = direction
+	arrow.object_type = arrow.PickType.ARROW
+	arrow.facing_right = facing_right
 	arrow.fired = true
-	if direction == 'right':
+	if facing_right:
 		arrow.position = pew + Vector2(8, 0)
 	else:
 		arrow.position = pew - Vector2(8, 0)

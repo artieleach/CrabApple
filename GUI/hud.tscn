@@ -26,7 +26,7 @@ bomb_counter = NodePath("MarginContainer/HBoxContainer/VBoxContainer/HBoxContain
 chain_counter = NodePath("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Chains")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
-anchors_preset = -1
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 0.287
 offset_left = -0.5
@@ -40,111 +40,83 @@ theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
-offset_left = 2.0
-offset_right = 159.0
-offset_bottom = 29.0
+layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-offset_right = 21.0
-offset_bottom = 29.0
+layout_mode = 2
 alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
-offset_top = 6.0
-offset_right = 21.0
-offset_bottom = 22.0
+layout_mode = 2
 
 [node name="Health" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer"]
-offset_right = 9.0
-offset_bottom = 16.0
+layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 text = "4 "
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer"]
-offset_left = 13.0
-offset_right = 21.0
-offset_bottom = 16.0
+layout_mode = 2
 size_flags_horizontal = 0
 texture = ExtResource("2_8lu2g")
 stretch_mode = 3
 
 [node name="VSeparator" type="VSeparator" parent="MarginContainer/HBoxContainer"]
-offset_left = 21.0
-offset_right = 113.0
-offset_bottom = 29.0
+layout_mode = 2
 theme_override_constants/separation = 92
 theme_override_styles/separator = SubResource("StyleBoxEmpty_ua7lm")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-offset_left = 113.0
-offset_right = 157.0
-offset_bottom = 29.0
+layout_mode = 2
 theme_override_constants/separation = -6
 alignment = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-offset_top = 3.0
-offset_right = 44.0
-offset_bottom = 19.0
+layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="TextureRect3" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
-offset_right = 8.0
-offset_bottom = 16.0
+layout_mode = 2
 texture = ExtResource("4_d0dvj")
 stretch_mode = 3
 
 [node name="Bombs" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
-offset_left = 8.0
-offset_right = 17.0
-offset_bottom = 16.0
+layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 text = "4 "
 
 [node name="VSeparator" type="VSeparator" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
-offset_left = 17.0
-offset_right = 27.0
-offset_bottom = 16.0
+layout_mode = 2
 theme_override_constants/separation = 10
 theme_override_styles/separator = SubResource("StyleBoxEmpty_bx536")
 
 [node name="TextureRect4" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
-offset_left = 27.0
-offset_right = 35.0
-offset_bottom = 16.0
+layout_mode = 2
 texture = ExtResource("5_ajcg7")
 stretch_mode = 3
 
 [node name="Chains" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
-offset_left = 35.0
-offset_right = 44.0
-offset_bottom = 16.0
+layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 text = "4 "
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-offset_top = 13.0
-offset_right = 44.0
-offset_bottom = 29.0
+layout_mode = 2
 
 [node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
-offset_right = 8.0
-offset_bottom = 16.0
+layout_mode = 2
 size_flags_horizontal = 8
 texture = ExtResource("3_wf6mj")
 stretch_mode = 3
 
 [node name="Wealth" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
-offset_left = 12.0
-offset_right = 42.0
-offset_bottom = 16.0
+layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
