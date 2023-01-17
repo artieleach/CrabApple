@@ -8,6 +8,7 @@ var hook = preload("res://Actors/Hook/hook.tscn")
 var grapple = preload("res://Actors/Grapple/grapple.tscn")
 var arrow_trap = preload("res://Actors/Arrow Trap/arrow_trap.tscn")
 var player_bumper = preload("res://Actors/Player/player_bumper.tscn")
+var hook_and_grapple = preload("res://Actors/HookAndGrapple/hook_and_grapple.tscn")
 
 var layers = {
 	"collision": 0,

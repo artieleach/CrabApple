@@ -1,0 +1,61 @@
+[gd_scene load_steps=6 format=3 uid="uid://vk462lnyiqm0"]
+
+[ext_resource type="Script" path="res://Actors/HookAndGrapple/hook_and_grapple.gd" id="1_6l270"]
+[ext_resource type="Texture2D" uid="uid://d354njah1knu" path="res://Actors/Hook/chain.png" id="1_le3hk"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_n4qy7"]
+radius = 5.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kcfxt"]
+radius = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6ggf0"]
+radius = 2.0
+
+[node name="HookAndGrapple" type="RigidBody2D" node_paths=PackedStringArray("player_holder", "spring", "chain_texture", "collision_detector")]
+collision_layer = 0
+collision_mask = 0
+lock_rotation = true
+script = ExtResource("1_6l270")
+player_holder = NodePath("PlayerHolder")
+spring = NodePath("Spring")
+chain_texture = NodePath("ChainTexture")
+collision_detector = NodePath("CollisionDetector")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_n4qy7")
+debug_color = Color(0, 0.65098, 0.0392157, 0.419608)
+
+[node name="CollisionDetector" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionDetector"]
+shape = SubResource("CircleShape2D_kcfxt")
+debug_color = Color(0.996078, 0, 0.152941, 0.419608)
+
+[node name="ChainTexture" type="TextureRect" parent="."]
+offset_right = 8.0
+rotation = 0.000385778
+pivot_offset = Vector2(4, 0)
+texture = ExtResource("1_le3hk")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Spring" type="DampedSpringJoint2D" parent="."]
+node_a = NodePath("..")
+node_b = NodePath("../PlayerHolder")
+length = 2.0
+rest_length = 2.0
+stiffness = 64.0
+damping = 16.0
+
+[node name="PlayerHolder" type="RigidBody2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+lock_rotation = true
+linear_damp = 0.2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerHolder"]
+shape = SubResource("CircleShape2D_6ggf0")
+debug_color = Color(0.819608, 0, 0.964706, 0.419608)
+
+[connection signal="body_entered" from="CollisionDetector" to="." method="_on_collision_detector_body_entered"]

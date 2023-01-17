@@ -59,8 +59,10 @@ func _ready():
 	background.size = map_dimensions * Vector2(80, 64)
 	check_spikes()
 
+
 func _process(delta):
 	cam.position = lerp(cam.position, player.camera_center.global_position, 18*delta)
+
 
 func _rumble_gamepad(weak_magnitude: float, strong_magnitude: float) -> void:
 	var gamepads : Array = Input.get_connected_joypads()

@@ -57,6 +57,8 @@ var i_frames := false
 
 signal hit
 
+var dir := Vector2.ZERO
+
 func _ready():
 	pass
 
@@ -84,7 +86,7 @@ func _process(_delta):
 
 
 func _physics_process(delta):
-	var dir = Vector2(1, 1) if player_sprite.flip_h == false else Vector2(-1, 1)
+	dir = Vector2(1, 1) if player_sprite.flip_h == false else Vector2(-1, 1)
 	if is_on_floor() or state == State.LATCH:
 		coyote_time = 0.0
 		detatch_from_grapple()
@@ -97,18 +99,12 @@ func _physics_process(delta):
 		coyote_time += delta
 		player_sprite.animation = "jump"
 		velocity.y += gravity * delta
-	
-	if active_grapple != null and state == State.GRAPPLE:
-		position = active_grapple.player_holder.global_position
-		if abs(active_grapple.player_holder.linear_velocity.x) < 1:
-			detatch_from_grapple()
+
 	
 	if Input.is_action_just_pressed("jump"):
 		look_timer = 0.0
 		if state == State.LATCH and Input.is_action_pressed("down"):
 			state = State.FALL
-		elif state == State.GRAPPLE and Input.is_action_pressed("down"):
-			detatch_from_grapple()
 		elif is_on_floor() or state in [State.LATCH, State.CLIMB, State.GRAPPLE] or coyote_time < 0.1:
 			detatch_from_grapple()
 			skip_frame = true
@@ -117,16 +113,11 @@ func _physics_process(delta):
 			else:
 				velocity.y += JUMP_VELOCITY
 			state = State.FALL
-		elif len(get_tree().get_nodes_in_group("hooks")) == 0:
-			var cur_hook = Global.hook.instantiate()
-			active_grapple = null
-			cur_hook.position = position
-			cur_hook.target = self
-			cur_hook.add_to_group("hooks")
-			get_parent().add_child(cur_hook)
-			cur_hook.connect("hooked", add_hook)
-			cur_hook.linear_velocity = Vector2(120, -300) * dir + velocity * Vector2(1, 0.5)
+		elif len(get_tree().get_nodes_in_group("grapples")) == 0:
+			shoot_grapple()
 	
+	if Input.is_action_just_released("jump"):
+		detatch_from_grapple()
 	
 	if is_on_floor() and velocity == Vector2.ZERO:
 		player_sprite.animation = "idle"
@@ -139,8 +130,6 @@ func _physics_process(delta):
 			player_sprite.flip_h = direction < 0
 		if not state in [State.LATCH, State.CLIMB]:
 			velocity.x = lerp(velocity.x , direction * SPEED, 0.045)
-			if active_grapple:
-				active_grapple.player_holder.apply_central_force(Vector2(velocity.x, 0))
 			ledge_grab.scale.x = dir.x
 			space_check.scale.x = dir.x
 			floor_check.scale.x = dir.x
@@ -290,40 +279,19 @@ func _physics_process(delta):
 func drop_held_item():
 	throw = true
 
-func add_hook(hook_pos):
-	active_grapple = null
-	for grap in get_tree().get_nodes_in_group("grapples"):
-		grap.queue_free()
-	var distance_to_player = hook_pos.distance_to(position)
-	if distance_to_player > 10:
-		var cur_grapple = Global.grapple.instantiate()
-		cur_grapple.add_to_group("grapples")
-		cur_grapple.target = self
-		get_parent().call_deferred("add_child", cur_grapple)
-		cur_grapple.position = hook_pos
-		cur_grapple.rotation = cur_grapple.position.angle_to_point(position) - (PI / 2)
-		cur_grapple.spring.length = distance_to_player / 2
-		cur_grapple.spring.rest_length = distance_to_player / 2
-		cur_grapple.player_holder.global_position = position
-		cur_grapple.player_holder.linear_velocity = velocity
-		state = State.GRAPPLE
-		active_grapple = cur_grapple
-		if distance_to_player > 44:
-			detatch_from_grapple()
-		
-	
+func shoot_grapple():
+	var cur_grap = Global.hook_and_grapple.instantiate()
+	cur_grap.target = self
+	active_grapple = cur_grap
+	get_parent().add_child(cur_grap)
+
 
 func detatch_from_grapple():
 	if active_grapple != null:
-		velocity = active_grapple.player_holder.linear_velocity
+		if active_grapple.state == active_grapple.State.LATCH:
+			velocity = active_grapple.player_holder.linear_velocity
 		state = State.FALL
-		var cur_chain = Global.hook.instantiate()
-		cur_chain.target = self
-		cur_chain.extend = false
-		cur_chain.add_to_group("hooks")
-		cur_chain.position = active_grapple.position
-		get_parent().call_deferred("add_child", cur_chain)
-		active_grapple.queue_free()
+		active_grapple.change_state(active_grapple.State.RETRACT)
 		active_grapple = null
 
 
